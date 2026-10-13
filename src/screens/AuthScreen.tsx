@@ -1,18 +1,13 @@
-
 import React from "react";
 import {
-  Platform,
   ScrollView,
-  StyleSheet,
   View,
 } from "react-native";
 
 import HeroLoginSection from "../components/auth/HeroLoginSection";
 import AuthLoginSection from "../components/auth/AuthLoginSection";
 
-if (Platform.OS === "web") {
-  require("./AuthScreen.css");
-}
+import { styles } from "./AuthScreen.styles";
 
 export default function AuthScreen() {
   return (
@@ -29,17 +24,3 @@ export default function AuthScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    backgroundColor: "#F4F8FF",
-  },
-  scrollContent: {
-    flexGrow: 1,
-  },
-  container: {
-    flexGrow: 1,
-    backgroundColor: "#F4F8FF",
-  },
-});

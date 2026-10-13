@@ -1,6 +1,4 @@
-
 import { useEffect, useState } from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
 
 import IntroSection from "../screens/IntroSection";
 import AuthScreen from "../screens/AuthScreen";

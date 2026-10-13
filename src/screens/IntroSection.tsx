@@ -1,129 +1,165 @@
-
 import React, { useEffect, useRef } from "react";
 import {
   Animated,
   Easing,
-  Platform,
-  StyleSheet,
+  Image,
   Text,
   View,
 } from "react-native";
 
-import { INTRO_CONTENT, INTRO_CONFIG } from "../constants/intro";
+import {
+  INTRO_CONTENT,
+  INTRO_CONFIG,
+} from "../constants/intro";
 
-if (Platform.OS === "web") {
-  require("./IntroSection.css");
-}
+import { styles } from "./IntroSection.styles";
+
+const logoImage = require("../assets/images/logo.png");
 
 export default function IntroSection() {
   const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.85)).current;
+  const scale = useRef(new Animated.Value(0.8)).current;
+  const translateY = useRef(new Animated.Value(18)).current;
   const taglineOpacity = useRef(new Animated.Value(0)).current;
+  const taglineTranslateY = useRef(new Animated.Value(10)).current;
 
   useEffect(() => {
-    const animation = Animated.parallel([
+    const logoAnimation = Animated.parallel([
       Animated.timing(opacity, {
         toValue: 1,
         duration: INTRO_CONFIG.logoAnimationDuration,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
+
       Animated.spring(scale, {
         toValue: 1,
         friction: 7,
         tension: 55,
         useNativeDriver: true,
       }),
+
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: INTRO_CONFIG.logoAnimationDuration,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
     ]);
 
-    animation.start();
+    logoAnimation.start();
 
-    const timer = setTimeout(() => {
-      Animated.timing(taglineOpacity, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }).start();
+    const taglineTimer = setTimeout(() => {
+      Animated.parallel([
+        Animated.timing(taglineOpacity, {
+          toValue: 1,
+          duration: 700,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(taglineTranslateY, {
+          toValue: 0,
+          duration: 700,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]).start();
     }, INTRO_CONFIG.taglineDelay);
 
     return () => {
-      clearTimeout(timer);
-      animation.stop();
+      clearTimeout(taglineTimer);
+      logoAnimation.stop();
+      opacity.stopAnimation();
+      scale.stopAnimation();
+      translateY.stopAnimation();
+      taglineOpacity.stopAnimation();
+      taglineTranslateY.stopAnimation();
     };
-  }, [opacity, scale, taglineOpacity]);
+  }, [
+    opacity,
+    scale,
+    translateY,
+    taglineOpacity,
+    taglineTranslateY,
+  ]);
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: INTRO_CONTENT.backgroundColor },
-      ]}
-    >
+    <View style={styles.container}>
+      {/* Decorative blue background shapes */}
+      <View style={styles.topGlow} />
+      <View style={styles.bottomGlow} />
+      <View style={styles.blueOrb} />
+
+      {/* Main brand content */}
       <View style={styles.content}>
+        <Animated.View
+          style={[
+            styles.logoContainer,
+            {
+              opacity,
+              transform: [
+                { scale },
+                { translateY },
+              ],
+            },
+          ]}
+        >
+          <Image
+            source={logoImage}
+            style={styles.logo}
+            resizeMode="contain"
+            accessibilityLabel="TrimTokyo logo"
+          />
+        </Animated.View>
+
         <Animated.Text
           style={[
             styles.brand,
             {
               opacity,
-              transform: [{ scale }],
+              transform: [{ translateY }],
             },
           ]}
         >
           {INTRO_CONTENT.brandName}
         </Animated.Text>
 
-        <View style={styles.accent} />
+        <View style={styles.accentContainer}>
+          <View style={styles.accentLine} />
+          <View style={styles.accentDot} />
+          <View style={styles.accentLine} />
+        </View>
 
         <Animated.Text
-          style={[styles.tagline, { opacity: taglineOpacity }]}
+          style={[
+            styles.tagline,
+            {
+              opacity: taglineOpacity,
+              transform: [{ translateY: taglineTranslateY }],
+            },
+          ]}
         >
           {INTRO_CONTENT.tagline}
         </Animated.Text>
+
+        <Animated.View
+          style={[
+            styles.statusIndicator,
+            { opacity: taglineOpacity },
+          ]}
+        >
+          <View style={styles.statusDot} />
+          <Text style={styles.statusText}>
+            YOUR STYLE STARTS HERE
+          </Text>
+        </Animated.View>
       </View>
 
+      {/* Footer */}
       <Text style={styles.footer}>
         {INTRO_CONTENT.footer}
       </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 24,
-  },
-  content: {
-    alignItems: "center",
-  },
-  brand: {
-    fontSize: 42,
-    fontWeight: "800",
-    letterSpacing: 1.5,
-    color: "#FFFFFF",
-  },
-  accent: {
-    width: 54,
-    height: 2,
-    marginTop: 22,
-    marginBottom: 20,
-    backgroundColor: "#C8A46A",
-    borderRadius: 2,
-  },
-  tagline: {
-    fontSize: 11,
-    fontWeight: "600",
-    letterSpacing: 3,
-    color: "#C8A46A",
-    textAlign: "center",
-  },
-  footer: {
-    position: "absolute",
-    bottom: 42,
-    fontSize: 9,
-    letterSpacing: 3,
-    color: "#77777D",
-  },
-});
