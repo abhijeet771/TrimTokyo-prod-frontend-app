@@ -13,7 +13,10 @@ export default function RootLayout() {
             backgroundColor: "#0B0B0D",
           },
         }}
-      />
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="user/index" />
+      </Stack>
     </>
   );
 }

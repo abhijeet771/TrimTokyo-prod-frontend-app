@@ -1,5 +1,14 @@
+
 import React, { useState } from "react";
-import { Alert, Keyboard, Platform, Pressable, Text, TextInput, View,} from "react-native";
+import {
+  Alert,
+  Keyboard,
+  Platform,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -33,7 +42,7 @@ export default function AuthLoginSection() {
     if (selectedRole === "BARBER") {
       router.replace("/barber");
     } else {
-      router.replace("/shop");
+      router.replace("/user");
     }
   };
 
@@ -59,7 +68,6 @@ export default function AuthLoginSection() {
       <View style={styles.phoneInputContainer}>
         <View style={styles.countryCodeContainer}>
           <Text style={styles.flag}>🇮🇳</Text>
-
           <Text style={styles.countryCode}>
             {AUTH_CONTENT.countryCode}
           </Text>
@@ -83,16 +91,13 @@ export default function AuthLoginSection() {
       </View>
 
       {/* Temporary role selector */}
-      <Text style={styles.roleHeading}>
-        Continue as
-      </Text>
+      <Text style={styles.roleHeading}>Continue as</Text>
 
       <View style={styles.roleOptions}>
         <Pressable
           style={[
             styles.roleOption,
-            selectedRole === "USER" &&
-              styles.roleOptionActive,
+            selectedRole === "USER" && styles.roleOptionActive,
           ]}
           onPress={() => setSelectedRole("USER")}
           accessibilityRole="button"
@@ -103,18 +108,12 @@ export default function AuthLoginSection() {
           <Ionicons
             name="person-outline"
             size={21}
-            color={
-              selectedRole === "USER"
-                ? "#1769FF"
-                : "#71839F"
-            }
+            color={selectedRole === "USER" ? "#1769FF" : "#71839F"}
           />
-
           <Text
             style={[
               styles.roleText,
-              selectedRole === "USER" &&
-                styles.roleTextActive,
+              selectedRole === "USER" && styles.roleTextActive,
             ]}
           >
             Customer
@@ -124,8 +123,7 @@ export default function AuthLoginSection() {
         <Pressable
           style={[
             styles.roleOption,
-            selectedRole === "BARBER" &&
-              styles.roleOptionActive,
+            selectedRole === "BARBER" && styles.roleOptionActive,
           ]}
           onPress={() => setSelectedRole("BARBER")}
           accessibilityRole="button"
@@ -136,18 +134,12 @@ export default function AuthLoginSection() {
           <Ionicons
             name="cut-outline"
             size={21}
-            color={
-              selectedRole === "BARBER"
-                ? "#1769FF"
-                : "#71839F"
-            }
+            color={selectedRole === "BARBER" ? "#1769FF" : "#71839F"}
           />
-
           <Text
             style={[
               styles.roleText,
-              selectedRole === "BARBER" &&
-                styles.roleTextActive,
+              selectedRole === "BARBER" && styles.roleTextActive,
             ]}
           >
             Barber
@@ -167,16 +159,13 @@ export default function AuthLoginSection() {
         <Text style={styles.continueButtonText}>
           {AUTH_CONTENT.continueButton}
         </Text>
-
         <Text style={styles.arrow}>→</Text>
       </Pressable>
 
       {/* Divider */}
       <View style={styles.dividerContainer}>
         <View style={styles.divider} />
-
         <Text style={styles.orText}>OR</Text>
-
         <View style={styles.divider} />
       </View>
 
@@ -190,7 +179,6 @@ export default function AuthLoginSection() {
         accessibilityRole="button"
       >
         <Text style={styles.phoneIcon}>▯</Text>
-
         <Text style={styles.alternativeButtonText}>
           {AUTH_CONTENT.alternativeLogin}
         </Text>
@@ -211,9 +199,7 @@ export default function AuthLoginSection() {
             {AUTH_CONTENT.termsOfService}
           </Text>
 
-          <Text style={styles.legalText}>
-            {" "}and{" "}
-          </Text>
+          <Text style={styles.legalText}>{" "}and{" "}</Text>
 
           <Text
             style={styles.legalLink}
