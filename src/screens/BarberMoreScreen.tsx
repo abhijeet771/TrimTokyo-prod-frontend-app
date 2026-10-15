@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   View,
@@ -22,48 +21,62 @@ type MenuItem = {
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   backgroundColor: string;
-  action: () => void;
+  route?: string;
+  action?: () => void;
 };
 
 export default function BarberMoreScreen() {
   const router = useRouter();
 
-  const openWebsite = async () => {
-    const websiteUrl = "https://your-brand-website.com";
+  // Replace these with your actual website and support email.
+  const WEBSITE_URL = "https://your-brand-website.com";
+  const SUPPORT_EMAIL = "support@your-domain.com";
 
+  const openWebsite = async () => {
     try {
-      await Linking.openURL(websiteUrl);
+      const supported = await Linking.canOpenURL(WEBSITE_URL);
+
+      if (!supported) {
+        Alert.alert("Error", "Unable to open the website.");
+        return;
+      }
+
+      await Linking.openURL(WEBSITE_URL);
     } catch {
       Alert.alert("Error", "Unable to open the website.");
     }
   };
 
-  const openServices = () => {
-    Alert.alert(
-      "Services",
-      "Your barber services will be available here."
-    );
+  const openHelpSupport = async () => {
+    const emailUrl = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
+      "TrimTokyo Barber Support"
+    )}`;
+
+    try {
+      await Linking.openURL(emailUrl);
+    } catch {
+      Alert.alert(
+        "Help & Support",
+        `Contact our support team at ${SUPPORT_EMAIL}.`
+      );
+    }
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to log out?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
+    Alert.alert("Logout", "Are you sure you want to log out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: () => {
+          // Connect your authentication logout flow here.
+          router.replace("/");
         },
-        {
-          text: "Logout",
-          style: "destructive",
-          onPress: () => {
-            // Connect your authentication logout flow here.
-            router.replace("/");
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   const menuItems: MenuItem[] = [
@@ -73,11 +86,7 @@ export default function BarberMoreScreen() {
       icon: "person-outline",
       color: "#6558D3",
       backgroundColor: "#EFEDFF",
-      action: () =>
-        Alert.alert(
-          "My Profile",
-          "Your profile screen will be connected here."
-        ),
+      route: "/barber/profile",
     },
     {
       title: "Settings",
@@ -85,23 +94,15 @@ export default function BarberMoreScreen() {
       icon: "settings-outline",
       color: "#2878C8",
       backgroundColor: "#EAF4FF",
-      action: () =>
-        Alert.alert(
-          "Settings",
-          "Your settings screen will be connected here."
-        ),
+      route: "/barber/settings",
     },
     {
       title: "Help & Support",
-      description: "Get help with your account",
+      description: "Contact us for help with your account",
       icon: "help-circle-outline",
       color: "#13856A",
       backgroundColor: "#E5F7F1",
-      action: () =>
-        Alert.alert(
-          "Help & Support",
-          "Your support options will be connected here."
-        ),
+      action: openHelpSupport,
     },
     {
       title: "Brand Website",
@@ -113,13 +114,22 @@ export default function BarberMoreScreen() {
     },
     {
       title: "Services",
-      description: "View your barber services",
+      description: "View and manage your barber services",
       icon: "cut-outline",
       color: "#C0782C",
       backgroundColor: "#FFF2E2",
-      action: openServices,
+      route: "/barber/services",
     },
   ];
+
+  const handleMenuPress = (item: MenuItem) => {
+    if (item.route) {
+      router.push(item.route as never);
+      return;
+    }
+
+    item.action?.();
+  };
 
   return (
     <View style={styles.container}>
@@ -142,12 +152,8 @@ export default function BarberMoreScreen() {
             styles.profileCard,
             pressed && styles.pressed,
           ]}
-          onPress={() =>
-            Alert.alert(
-              "My Profile",
-              "Your profile screen will be connected here."
-            )
-          }
+          onPress={() => router.push("/barber/profile" as never)}
+          accessibilityRole="button"
         >
           <View style={styles.profileAvatar}>
             <Ionicons
@@ -192,7 +198,7 @@ export default function BarberMoreScreen() {
                   styles.menuItemBorder,
                 pressed && styles.pressed,
               ]}
-              onPress={item.action}
+              onPress={() => handleMenuPress(item)}
               accessibilityRole="button"
               accessibilityLabel={item.title}
             >
