@@ -1,15 +1,36 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, Modal, ScrollView, Alert, Platform,} from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Modal,
+  ScrollView,
+  Alert,
+  Platform,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, usePathname, useNavigation } from "expo-router";
 
 import { BARBER_PROFILE_MENU } from "../../constants/barber";
 import { styles } from "./BarberHeader.styles";
 
 export default function BarberHeader() {
   const router = useRouter();
+  const pathname = usePathname();
+  const navigation = useNavigation();
+
   const [profileVisible, setProfileVisible] = useState(false);
   const [notificationVisible, setNotificationVisible] = useState(false);
+
+  const isDashboard = pathname === "/barber";
+
+  const handleBackPress = () => {
+    if (navigation.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/barber");
+    }
+  };
 
   const handleOptionPress = (route: string) => {
     setProfileVisible(false);
@@ -55,8 +76,29 @@ export default function BarberHeader() {
       {/* Header */}
       <View style={styles.container}>
         <View style={styles.brandContainer}>
+          {!isDashboard && (
+            <Pressable
+              style={styles.backButton}
+              onPress={handleBackPress}
+              accessibilityRole="button"
+              accessibilityLabel="Go back"
+              hitSlop={8}
+            >
+              <Ionicons
+                name="arrow-back"
+                size={22}
+                color="#15233F"
+                style={styles.backIcon}
+              />
+            </Pressable>
+          )}
+
           <View style={styles.logoMark}>
-            <Ionicons name="cut-outline" size={22} color="#1769FF" />
+            <Ionicons
+              name="cut-outline"
+              size={22}
+              color="#1769FF"
+            />
           </View>
 
           <View>
@@ -79,7 +121,11 @@ export default function BarberHeader() {
             accessibilityRole="button"
             accessibilityLabel="Open notifications"
           >
-            <Ionicons name="notifications-outline" size={24} color="#15233F"/>
+            <Ionicons
+              name="notifications-outline"
+              size={24}
+              color="#15233F"
+            />
 
             <View style={styles.notificationDot} />
           </Pressable>
@@ -92,7 +138,11 @@ export default function BarberHeader() {
             accessibilityLabel="Open profile menu"
           >
             <View style={styles.avatar}>
-              <Ionicons name="person" size={25} color="#1769FF" />
+              <Ionicons
+                name="person"
+                size={25}
+                color="#1769FF"
+              />
             </View>
 
             <View style={styles.onlineDot} />
@@ -133,7 +183,8 @@ export default function BarberHeader() {
               contentContainerStyle={styles.dialogContent}
             >
               <View style={styles.largeAvatar}>
-                <Ionicons name="person"
+                <Ionicons
+                  name="person"
                   size={48}
                   color="#1769FF"
                 />
@@ -157,7 +208,11 @@ export default function BarberHeader() {
                   accessibilityRole="button"
                 >
                   <View style={styles.menuIconContainer}>
-                    <Ionicons name={option.icon} size={21} color="#263A5B" />
+                    <Ionicons
+                      name={option.icon}
+                      size={21}
+                      color="#263A5B"
+                    />
                   </View>
 
                   <Text style={styles.menuLabel}>
@@ -189,7 +244,11 @@ export default function BarberHeader() {
                   {BARBER_PROFILE_MENU.logout.label}
                 </Text>
 
-                <Ionicons name="chevron-forward" size={19} color="#E53935" />
+                <Ionicons
+                  name="chevron-forward"
+                  size={19}
+                  color="#E53935"
+                />
               </Pressable>
             </ScrollView>
           </View>
@@ -221,13 +280,21 @@ export default function BarberHeader() {
                 accessibilityRole="button"
                 accessibilityLabel="Close notifications"
               >
-                <Ionicons name="close" size={24} color="#15233F" />
+                <Ionicons
+                  name="close"
+                  size={24}
+                  color="#15233F"
+                />
               </Pressable>
             </View>
 
             <View style={styles.emptyNotification}>
               <View style={styles.emptyNotificationIcon}>
-                <Ionicons name="notifications-outline" size={32} color="#1769FF" />
+                <Ionicons
+                  name="notifications-outline"
+                  size={32}
+                  color="#1769FF"
+                />
               </View>
 
               <Text style={styles.emptyTitle}>

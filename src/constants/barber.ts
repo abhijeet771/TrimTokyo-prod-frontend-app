@@ -133,7 +133,7 @@ export const BARBER_PROFILE_MENU = {
       id: "support",
       label: "Help & Support",
       icon: "help-circle-outline",
-      route: "/barber/help",
+      route: "/barber/support",
     },
   ],
 

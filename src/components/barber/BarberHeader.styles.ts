@@ -20,6 +20,23 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
 
+  // Back Button
+  backButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F5F8FF",
+    borderWidth: 1,
+    borderColor: "#E4ECF8",
+    marginRight: 2,
+  },
+
+  backIcon: {
+    marginLeft: -1,
+  },
+
   logoMark: {
     width: 42,
     height: 42,

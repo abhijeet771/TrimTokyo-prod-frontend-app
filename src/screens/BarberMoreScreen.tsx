@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  Alert,
-  Linking,
-} from "react-native";
+import { View, Text, ScrollView, Pressable, Alert, Linking,} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
@@ -28,24 +21,7 @@ type MenuItem = {
 export default function BarberMoreScreen() {
   const router = useRouter();
 
-  // Replace these with your actual website and support email.
-  const WEBSITE_URL = "https://your-brand-website.com";
   const SUPPORT_EMAIL = "support@your-domain.com";
-
-  const openWebsite = async () => {
-    try {
-      const supported = await Linking.canOpenURL(WEBSITE_URL);
-
-      if (!supported) {
-        Alert.alert("Error", "Unable to open the website.");
-        return;
-      }
-
-      await Linking.openURL(WEBSITE_URL);
-    } catch {
-      Alert.alert("Error", "Unable to open the website.");
-    }
-  };
 
   const openHelpSupport = async () => {
     const emailUrl = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
@@ -97,20 +73,20 @@ export default function BarberMoreScreen() {
       route: "/barber/settings",
     },
     {
-      title: "Help & Support",
-      description: "Contact us for help with your account",
-      icon: "help-circle-outline",
-      color: "#13856A",
-      backgroundColor: "#E5F7F1",
-      action: openHelpSupport,
+     title: "Help & Support",
+     description: "Raise tickets and track your issues",
+     icon: "help-circle-outline",
+     color: "#13856A",
+     backgroundColor: "#E5F7F1",
+     route: "/barber/support",
     },
     {
       title: "Brand Website",
-      description: "Visit the official TrimTokyo website",
+      description: "Your business website is coming soon",
       icon: "globe-outline",
       color: "#A05AC7",
       backgroundColor: "#F5EAFE",
-      action: openWebsite,
+      route: "/barber/brand-website",
     },
     {
       title: "Services",
