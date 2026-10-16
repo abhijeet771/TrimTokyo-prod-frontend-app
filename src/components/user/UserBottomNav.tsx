@@ -26,8 +26,8 @@ const NAV_ITEMS: {
   {
     key: "home",
     label: "Home",
-    icon: "home-outline",
-    activeIcon: "home",
+    icon: "storefront-outline",
+    activeIcon: "storefront",
   },
   {
     key: "home-service",

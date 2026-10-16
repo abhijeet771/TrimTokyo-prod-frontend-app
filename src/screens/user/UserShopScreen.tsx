@@ -1,23 +1,19 @@
-
 import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, ScrollView, Alert,} from "react-native";
+import { useRouter } from "expo-router";
 
 import UserHeader from "../../components/user/UserHeader";
 import UserShopCategories from "../../components/user/UserShopCategories";
 import UserPopularBarbersShops from "../../components/user/UserPopularBarbersShops";
-import UserBottomNav, {
-  type UserTab,
-} from "../../components/user/UserBottomNav";
+import UserBottomNav, { type UserTab,} from "../../components/user/UserBottomNav";
 
-import type { PopularBarber, NearbyShop } from "../../constants/user/userPopularBarbersShops";
+import type { PopularBarber, NearbyShop,} from "../../constants/user/userPopularBarbersShops";
 
 import { styles } from "./UserShopScreen.styles";
 
 export default function UserShopScreen() {
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState<UserTab>("home");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,15 +68,35 @@ export default function UserShopScreen() {
     isFavorite: boolean
   ) => {
     console.log(
-      `${shop.name} ${isFavorite ? "added to" : "removed from"} favorites`
+      `${shop.name} ${
+        isFavorite ? "added to" : "removed from"
+      } favorites`
     );
   };
 
   const handleTabPress = (tab: UserTab) => {
     setActiveTab(tab);
 
-    if (tab !== "home") {
-      console.log("Navigate to user tab:", tab);
+    switch (tab) {
+      case "home":
+        router.replace("/user");
+        break;
+
+      case "home-service":
+        router.push("/user/home-service");
+        break;
+
+      case "slots":
+        router.push("/user/slots");
+        break;
+
+      case "event":
+        router.push("/user/event");
+        break;
+
+      case "more":
+        router.push("/user/more");
+        break;
     }
   };
 
